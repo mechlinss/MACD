@@ -17,16 +17,17 @@ extracted_data = pd.read_csv("data/eth_v_d.csv")
 extracted_data["Data"] = pd.to_datetime(extracted_data["Data"])
 date = extracted_data["Data"]
 close = extracted_data[["Zamkniecie"]]
+close = close.to_numpy()
 
 plt.figure(figsize=(15, 7))
-plt.plot(date, close.values, color='b')
+plt.plot(date, close, color='b')
 plt.ylabel("Price [USD]")
 plt.xlabel("Date")
 plt.title("Ethereum price over 3 years")
 plt.grid(True)
 plt.show()
 
-macd = calculate_ema(12, close.to_numpy()) - calculate_ema(26, close.to_numpy())
+macd = calculate_ema(12, close) - calculate_ema(26, close)
 signal = calculate_ema(9, macd)
 
 plt.figure(figsize=(15, 7))
@@ -45,7 +46,7 @@ buy_dates = []
 sell_values = []
 sell_dates = []
 
-for i in range(0, len(macd) - 1):
+for i in range(len(macd) - 1):
     if signal[i] > macd[i] and signal[i + 1] < macd[i + 1]:
         buy_values.append(macd[i + 1])
         buy_dates.append(date[i + 1])
@@ -67,14 +68,24 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
+counter = 0
+buy_price = []
+sell_price = []
+
+for i in range(len(date)):
+    if date[i] in buy_dates:
+        buy_price.append(close[i])
+    elif date[i] in sell_dates:
+        sell_price.append(close[i])
+
+
 plt.figure(figsize=(15, 7))
-plt.plot(date, close.values, color='b')
-plt.scatter(buy_dates, buy_values, color='green', marker='^', label='BUY', s=75)
-plt.scatter(sell_dates, sell_values, color='red', marker='v', label='SELL', s=75)
+plt.plot(date, close, color='b')
+plt.scatter(buy_dates, buy_price, color='green', marker='^', label='BUY', s=75)
+plt.scatter(sell_dates, sell_price, color='red', marker='v', label='SELL', s=75)
 plt.ylabel("Price [USD]")
 plt.xlabel("Date")
 plt.title("Ethereum price over 3 years")
 plt.grid(True)
+plt.legend()
 plt.show()
-
-print(date.head())
