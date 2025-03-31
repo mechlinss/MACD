@@ -20,7 +20,7 @@ print("Type 2 for Dogecoin")
 choice = int(input("Your choice: "))
 if choice == 1:
     extracted_data = pd.read_csv("data/eth_v_d.csv")
-    choice = "Etherum"
+    choice = "Ethereum"
 elif choice == 2:
     extracted_data = pd.read_csv("data/doge_v_d.csv")
     choice = "Dogecoin"
