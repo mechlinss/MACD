@@ -39,6 +39,7 @@ def portfolio_plot(dates, values, title):
     plt.plot(dates, values, label="", color='green')
     plt.xticks(rotation=45)
     plt.xlabel("Date")
+    plt.ticklabel_format(style='plain', axis='y')
     plt.ylabel("USD")
     plt.title(title)
     plt.grid(True)
